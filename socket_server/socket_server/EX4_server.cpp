@@ -2,22 +2,7 @@
 //클라이언트에서 문제 요청하면 문제를 출력한다.
 //10문제를 풀이하면 클라이언트 최종 판단에 맞은 수, 틀린 수, 점수, 풀이시간 출력할 것 (새 cpp파일 만들어서 하기)
 
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-
-#include <WinSock2.h>
-#include <iostream>
-#include <Windows.h>
-#include "HandleClientCommand.h"
-
-#pragma comment(lib, "ws2_32.lib")
-
-
-#define PORT 3500
-#define MAX_BUF_SIZE 256
-#define FD_SETSIZE 100
-
-using namespace std;
+#include "head.h"
 
 int main() {
 	WSADATA wsdata;

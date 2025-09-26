@@ -1,6 +1,6 @@
 #include <iostream>
-#include <string>
 #include "HandleClientCommand.h"
+#include "Questions.h"
 
 using namespace std;
 
@@ -12,7 +12,7 @@ void SendMessageToClient(const SOCKET& clientSocket, const char* message)
 	}
 }
 
-void HandleClientCommand(const SOCKET& client_socket, const char* command)
+void HandleClientCommand(const SOCKET& client_socket, const string command)
 {
 	std::string message;
 	char str_client_socket[20];
@@ -25,7 +25,14 @@ void HandleClientCommand(const SOCKET& client_socket, const char* command)
 	
 	message = str_client_socket;
 	message += " : ";
-	message += command;
+	
+	if (command == "¹®Á¦") {
+		Questions quiz;
+		message += quiz.GetRandomQustion();
+	}
+	else {
+		
+	}
 
 	cout << message << endl;
 

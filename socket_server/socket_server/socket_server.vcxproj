@@ -137,6 +137,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HandleClientCommand.h" />
+    <ClInclude Include="head.h" />
+    <ClInclude Include="Questions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
