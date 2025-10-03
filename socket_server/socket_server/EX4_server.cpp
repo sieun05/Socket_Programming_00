@@ -4,6 +4,8 @@
 
 #include "head.h"
 
+extern ClientManager clientManager;
+
 int main() {
 	WSADATA wsdata;
 
@@ -66,6 +68,7 @@ int main() {
 				continue;
 			}
 			cout << client_socket << " 클라이언트 접속 성공" << endl;
+			clientManager.addClient(client_socket);
 			FD_SET(client_socket, &read_fds);
 			continue;
 		}
@@ -81,6 +84,7 @@ int main() {
 				closesocket(client_socket);
 				FD_CLR(client_socket, &read_fds);
 				cout << client_socket << " 클라이언트 접속 종료" << endl;
+				clientManager.removeClient(client_socket);
 			}
 			else {
 				cout << client_socket << " 클라이언트가 보낸 메세지: " << msg_str << endl;

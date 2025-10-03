@@ -1,8 +1,11 @@
 #include <iostream>
 #include "HandleClientCommand.h"
 #include "Questions.h"
+#include "ClientManager.h"
 
 using namespace std;
+
+ClientManager clientManager;
 
 void SendMessageToClient(const SOCKET& clientSocket, const char* message)
 {
@@ -24,17 +27,54 @@ void HandleClientCommand(const SOCKET& client_socket, const string command)
 	}
 	
 	message = str_client_socket;
-	message += " : ";
+	message += " :: ";
 	
-	if (command == "문제") {
-		Questions quiz;
-		message += quiz.GetRandomQustion();
+	if (not clientManager.isInQuiz(client_socket)) {
+		if (command == "문제") {
+			Questions quiz;
+			std::string question = quiz.GetRandomQustion();
+			clientManager.setCurrentQudstion(client_socket, question);
+			message += question;
+			clientManager.setInQuiz(client_socket, true);
+		}
+		else {
+			message += "퀴즈를 시작하려면 '문제'를 입력하세요.";
+		}
 	}
 	else {
-		
+		//문제 요청
+		if (command == "문제확인")
+		{
+			message += clientManager.getCurrentQuestion(client_socket);
+		}
+		else {
+			//답변 체크
+			clientManager.incrementQuizCnt(client_socket);
+
+			std::string currentQuestion = clientManager.getCurrentQuestion(client_socket);
+			Questions quiz;
+			if (quiz.CheckAnswer(currentQuestion, command)) {
+				message += "정답.\n";
+				clientManager.incrementScore(client_socket);
+			}
+			else {
+				message += "오답\n";
+			}
+
+			if (clientManager.getQuizCnt(client_socket) >= 10) {
+				message += "10문제 모두 풀었습니다.\n";
+				message += "맞은 개수: " + std::to_string(clientManager.getScore(client_socket)) + "\n";
+				message += "틀린 개수: " + std::to_string(10 - clientManager.getScore(client_socket)) + "\n";
+				clientManager.resetClient(client_socket);
+			}
+			else {
+				std::string question = quiz.GetRandomQustion();
+				clientManager.setCurrentQudstion(client_socket, question);
+				message += "다음문제: " + question;
+			}
+		}
 	}
 
 	cout << message << endl;
-
 	SendMessageToClient(client_socket, message.c_str());
 }

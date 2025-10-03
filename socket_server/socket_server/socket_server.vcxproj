@@ -136,6 +136,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClientManager.h" />
     <ClInclude Include="HandleClientCommand.h" />
     <ClInclude Include="head.h" />
     <ClInclude Include="Questions.h" />
