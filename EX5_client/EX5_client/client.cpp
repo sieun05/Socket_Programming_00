@@ -42,19 +42,22 @@ int main() {
 	}
 
 
-	char msg_str[MAX_BUF_SIZE];
+	int num{};
 
 	while (true) {
 		cout << "서버에 보낼 내용(대화종료: exit): ";
-		gets_s(msg_str, sizeof(msg_str));
-		if (!strncmp(msg_str, "exit", sizeof(msg_str))) {
-			break;
-		}
-		send(clientSocket, msg_str, MAX_BUF_SIZE, 0);
-		ZeroMemory(msg_str, MAX_BUF_SIZE);
 
-		recv(clientSocket, msg_str, MAX_BUF_SIZE, 0);
-		cout << "서버가 보낸 내용: " << msg_str << endl << endl;
+		cin >> num;
+		if (num == 999) break;
+		num = htonl(num);
+
+		send(clientSocket, (char*)&num, sizeof(num), 0);
+
+		num = 0;
+		recv(clientSocket, (char*)&num, sizeof(num), 0);
+		num = ntohl(num);
+
+		cout << "서버가 보낸 내용: " << num << endl << endl;
 	}
 
 	closesocket(clientSocket);

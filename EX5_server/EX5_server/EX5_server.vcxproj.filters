@@ -18,30 +18,15 @@
     <ClCompile Include="server.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EX4_server.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="HandleClientCommand.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="EX5_server.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="헤더.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="HandleClientCommand.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Questions.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="head.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="EX5_head.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

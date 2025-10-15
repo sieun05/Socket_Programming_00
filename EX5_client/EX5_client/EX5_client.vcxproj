@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{12a39414-d461-4ffa-99b9-f6b1dda304e6}</ProjectGuid>
-    <RootNamespace>socketserver</RootNamespace>
+    <ProjectGuid>{3fad75b7-b987-4317-bace-faa4edde2911}</ProjectGuid>
+    <RootNamespace>EX5client</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,21 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EX4_server.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="EX5_server.cpp" />
-    <ClCompile Include="HandleClientCommand.cpp" />
-    <ClCompile Include="server.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ClientManager.h" />
-    <ClInclude Include="EX5_head.h" />
-    <ClInclude Include="HandleClientCommand.h" />
-    <ClInclude Include="head.h" />
-    <ClInclude Include="Questions.h" />
+    <ClCompile Include="client.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
