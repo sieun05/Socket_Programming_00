@@ -3,15 +3,16 @@
 
 using namespace std;
 
-void SendMessageToClient(const SOCKET& clientSocket, int message)
+void SendMessageToClient(const SOCKET& clientSocket, int message[])
 {
-	int send_data = send(clientSocket, (char*)&message, sizeof(message), 0);
+	cout << ntohl(message[2]);
+	int send_data = send(clientSocket, (char*)message, sizeof(message), 0);
 	if (send_data == SOCKET_ERROR) {
 		std::cerr << "메시지 전송 실패: " << WSAGetLastError() << std::endl;
 	}
 }
 
-void HandleClientCommand(const SOCKET& clientSocket, int command)
+void HandleClientCommand(const SOCKET& clientSocket, int command[])
 {
 
 	//std::string message;
@@ -25,7 +26,10 @@ void HandleClientCommand(const SOCKET& clientSocket, int command)
 
 	//message = str_client_socket;
 	//message += " :: ";
-
-	command = htonl(command+100);
+	cout << clientSocket << " 클라이언트가 보낸 메세지: " << command[0] << ", " << command[1] << ", " << command[2] << endl;
+	for (int i{}; i < 3; i++) {
+		command[i] = htonl(command[i]);
+	}
+	
 	SendMessageToClient(clientSocket, command);
 }

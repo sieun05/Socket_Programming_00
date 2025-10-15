@@ -4,6 +4,6 @@
 
 #define MAX_BUF_SIZE 256
 
-void SendMessageToClient(const SOCKET& clientSocket, const char* message);
+void SendMessageToClient(const SOCKET& clientSocket, int message[]);
 //void HandleClientCommand(const SOCKET& clientSocket, const std::string command);
-void HandleClientCommand(const SOCKET& clientSocket, const int command);
+void HandleClientCommand(const SOCKET& clientSocket, int command[]);

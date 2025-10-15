@@ -42,22 +42,49 @@ int main() {
 	}
 
 
-	int num{};
+	int num[3]{};
 
 	while (true) {
-		cout << "서버에 보낼 내용(대화종료: exit): ";
+		cout << "서버에 보낼 내용(대화종료: exit): " << endl;
 
-		cin >> num;
-		if (num == 999) break;
-		num = htonl(num);
+		for (int i{}; i < 3; i++) {
+			cout << i << "번째 int 데이터 입력: ";
+			cin >> num[i];
 
+			if (cin.fail()) {
+				cout << "정수형 데이터가 아님. 종료" << endl;
+				i--;
+				continue;
+			}
+			if (num[i] == 999) break;
+		
+			cout << endl;
+		}
+		
+		if (num[0] == 999 || num[1] == 999 || num[2] == 999) {
+			cout << "대화 종료" << endl;
+			break;
+		}
+
+		for (int i{}; i < 3; i++) {
+			num[i] = htonl(num[i]);
+		}
 		send(clientSocket, (char*)&num, sizeof(num), 0);
 
-		num = 0;
-		recv(clientSocket, (char*)&num, sizeof(num), 0);
-		num = ntohl(num);
+		for (int i{}; i < 3; i++) {
+			num[i] = 0;
+		}
 
-		cout << "서버가 보낸 내용: " << num << endl << endl;
+		//세 번째 값을 안 받음 why???
+
+		recv(clientSocket, (char*)&num, sizeof(num), 0);
+		cout << "서버가 보낸 내용: " << num[0] << ", " << num[1] << ", " << num[2] << endl << endl;
+
+		for (int i{}; i < 3; i++) {
+			num[i] = ntohl(num[i]);
+		}
+
+		cout << "서버가 보낸 내용: " << num[0] << ", " << num[1] << ", " << num[2] << endl << endl;
 	}
 
 	closesocket(clientSocket);
