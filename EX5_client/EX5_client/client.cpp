@@ -76,6 +76,7 @@ int main() {
 		}
 
 		//세 번째 값을 안 받음 why???
+		cout << sizeof(num) << ' ' << sizeof(num[0]) << endl;
 
 		recv(clientSocket, (char*)&num, sizeof(num), 0);
 		cout << "서버가 보낸 내용: " << num[0] << ", " << num[1] << ", " << num[2] << endl << endl;

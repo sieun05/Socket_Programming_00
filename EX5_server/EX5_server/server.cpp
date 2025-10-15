@@ -85,6 +85,7 @@ int main() {
 				cout << client_socket << " 클라이언트 접속 종료" << endl;
 			}
 			else {
+				cout << sizeof(num) << ' ' << sizeof(num[0]) << endl;
 				cout << client_socket << " 클라이언트가 보낸 메세지: " << num[0] << ", " << num[1] << ", " << num[2] << endl;
 				HandleClientCommand(client_socket, num);
 			}

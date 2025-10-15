@@ -5,6 +5,7 @@ using namespace std;
 
 void SendMessageToClient(const SOCKET& clientSocket, int message[])
 {
+	cout << sizeof(message) << ' ' << sizeof(message[0]) << endl;
 	cout << ntohl(message[2]);
 	int send_data = send(clientSocket, (char*)message, sizeof(message), 0);
 	if (send_data == SOCKET_ERROR) {
@@ -26,6 +27,8 @@ void HandleClientCommand(const SOCKET& clientSocket, int command[])
 
 	//message = str_client_socket;
 	//message += " :: ";
+	cout << sizeof(command) << ' ' << sizeof(command[0]) << endl;
+
 	cout << clientSocket << " 클라이언트가 보낸 메세지: " << command[0] << ", " << command[1] << ", " << command[2] << endl;
 	for (int i{}; i < 3; i++) {
 		command[i] = htonl(command[i]);
