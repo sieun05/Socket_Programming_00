@@ -69,3 +69,24 @@ void HandleClientCommand_ex8(const SOCKET& clientSocket, Data data, int size)
 
 	SendMessageToClient_ex8(clientSocket, data, size);
 }
+
+
+void SendMessageToClient_ex9(const SOCKET& clientSocket, Data data[], int size)
+{
+
+	int send_data = send(clientSocket, (char*)data, size, 0);
+	if (send_data == SOCKET_ERROR) {
+		std::cerr << "메시지 전송 실패: " << WSAGetLastError() << std::endl;
+	}
+}
+
+void HandleClientCommand_ex9(const SOCKET& clientSocket, Data data[], int size)
+{
+
+	for (int i{}; i < size / sizeof(Data); i++) {
+		data[i].x = htonl(data[i].x);
+		data[i].y = htonl(data[i].y);
+	}
+
+	SendMessageToClient_ex9(clientSocket, data, size);
+}

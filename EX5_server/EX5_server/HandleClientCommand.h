@@ -11,6 +11,8 @@ void HandleClientCommand(const SOCKET& clientSocket, int command[], int size);
 void SendMessageToClient_ex7(const SOCKET& clientSocket, char message[][MAX_BUF_SIZE], int size);
 void HandleClientCommand_ex7(const SOCKET& clientSocket, char command[][MAX_BUF_SIZE], int size);
 
-
 void SendMessageToClient_ex8(const SOCKET& clientSocket, Data data, int size);
 void HandleClientCommand_ex8(const SOCKET& clientSocket, Data data, int size);
+
+void SendMessageToClient_ex9(const SOCKET& clientSocket, Data data[], int size);
+void HandleClientCommand_ex9(const SOCKET& clientSocket, Data data[], int size);

@@ -44,39 +44,62 @@ int main() {
 		return 1;
 	}
 
-	Data data;
+	Data data[3];
 
 	while (true) {
 		ZeroMemory(&data, sizeof(data));
 
 		cout << "서버에 보낼 내용(대화종료: 999): " << endl;
 
-		cout << "Data 문자열 입력: ";
-		cin.getline(data.msg_str, MAX_BUF_SIZE, '\n');
-		cout << "Data x 입력: ";
-		cin >> data.x;
-		cout << "Data y 입력: ";
-		cin >> data.y;
+		for (int i{}; i < 3; i++) {
+			cout << i << "번째 " << "Data 문자열 입력: ";
+			cin.getline(data[i].msg_str, MAX_BUF_SIZE, '\n');
+			cout << i << "번째 " << "Data x 입력: ";
+			cin >> data[i].x;
+			cout << i << "번째 " << "Data y 입력: ";
+			cin >> data[i].y;
 
-		if (not (strcmp(data.msg_str, "999"))) {
+			cin.clear();
+			cin.ignore(MAX_BUF_SIZE, '\n');
+		}
+		
+
+		if (not (strcmp(data[0].msg_str, "999") or strcmp(data[1].msg_str, "999") or strcmp(data[2].msg_str, "999"))) {
 			cout << "대화 종료" << endl;
 			break;
 		}
 
+		cout << data[0].x << endl;
 
-		data.x = htonl(data.x);
-		data.y = htonl(data.y);
-		send(clientSocket, (char*)&data, sizeof(data), 0);
+		for (int i{}; i < 3; i++)
+		{
+			data[i].x = htonl(data[i].x);
+			data[i].y = htonl(data[i].y);
+		}
+		
+		cout << data[0].x << endl;
+
+		send(clientSocket, (char*)data, sizeof(data), 0);
 
 		ZeroMemory(&data, sizeof(data));
-		recv(clientSocket, (char*)&data, sizeof(data), 0);
+		recv(clientSocket, (char*)data, sizeof(data), 0);
 
-		data.x = ntohl(data.x);
-		data.y = ntohl(data.y);
-		cout << "서버가 보낸 내용: " << data.msg_str << ", " << data.x << ", " << data.y << endl << endl;
+		cout << data[0].x << endl;
 
-		cin.clear();
-		cin.ignore(MAX_BUF_SIZE, '\n');
+		for (int i{}; i < 3; i++)
+		{
+			data[i].x = ntohl(data[i].x);
+			data[i].y = ntohl(data[i].y);
+		}
+
+		cout << data[0].x << endl;
+
+		cout << "서버가 보낸 내용: " << endl;
+
+		for (int i{}; i < 3; i++)
+			cout << i << "번째 " << "Data 문자열: " << data[i].msg_str << ", x: " << data[i].x << ", y: " << data[i].y << endl;
+
+		
 	}
 
 	closesocket(clientSocket);

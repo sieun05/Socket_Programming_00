@@ -52,7 +52,7 @@ int main() {
 	int read_data, send_data;
 	SOCKET client_socket;
 
-	Data msg_data;
+	Data msg_data[3];
 
 	while (true) {
 		all_fds = read_fds;
@@ -76,8 +76,7 @@ int main() {
 
 			ZeroMemory(&msg_data, sizeof(msg_data));
 
-			read_data = recv(client_socket, (char*)&msg_data, sizeof(msg_data), 0);
-
+			read_data = recv(client_socket, (char*)msg_data, sizeof(msg_data), 0);
 
 			if (read_data <= 0) {
 				closesocket(client_socket);
@@ -85,11 +84,22 @@ int main() {
 				cout << client_socket << " 클라이언트 접속 종료" << endl;
 			}
 			else {
-				msg_data.x = ntohl(msg_data.x);
-				msg_data.y = ntohl(msg_data.y);
-				cout << client_socket << " 클라이언트가 보낸 메세지: " << msg_data.msg_str << ", " << msg_data.x << ", " << msg_data.y << endl;
+				for (int i{}; i < 3; i++) {
+					cout << "[" << i << "] " << msg_data[i].msg_str << ", " << msg_data[i].x << ", " << msg_data[i].y << endl;
+				}
 
-				HandleClientCommand_ex8(client_socket, msg_data, sizeof(msg_data));
+				for (int i{}; i < 3; i++) {
+					msg_data[i].x = ntohl(msg_data[i].x);
+					msg_data[i].y = ntohl(msg_data[i].y);
+				}
+				
+				cout << client_socket << " 클라이언트가 보낸 메세지"  << endl;
+
+				for (int i{}; i < 3; i++) {
+					cout << "[" << i << "] " << msg_data[i].msg_str << ", " << msg_data[i].x << ", " << msg_data[i].y << endl;
+				}
+
+				HandleClientCommand_ex9(client_socket, msg_data, sizeof(msg_data));
 			}
 		}
 	}
