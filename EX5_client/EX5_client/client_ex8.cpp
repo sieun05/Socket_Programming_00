@@ -75,6 +75,8 @@ int main() {
 		data.y = ntohl(data.y);
 		cout << "서버가 보낸 내용: " << data.msg_str << ", " << data.x << ", " << data.y << endl << endl;
 
+		cin.clear();
+		cin.ignore(MAX_BUF_SIZE, '\n');
 	}
 
 	closesocket(clientSocket);
