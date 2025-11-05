@@ -133,7 +133,10 @@
     <ClCompile Include="client_ex7.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="client_ex8.cpp" />
+    <ClCompile Include="client_ex8.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="client_ex9.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Data.h" />
