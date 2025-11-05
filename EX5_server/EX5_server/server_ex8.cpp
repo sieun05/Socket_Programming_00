@@ -86,7 +86,7 @@ int main() {
 			else {
 				cout << client_socket << " 클라이언트가 보낸 메세지: " << msg_str[0] << ", " << msg_str[1] << ", " << msg_str[2] << endl;
 
-				HandleClientCommand_ex7(client_socket, msg_str, sizeof(msg_str)/sizeof(msg_str[0]));
+				HandleClientCommand_ex7(client_socket, msg_str, sizeof(msg_str) / sizeof(msg_str[0]));
 			}
 		}
 	}
