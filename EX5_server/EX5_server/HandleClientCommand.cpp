@@ -47,17 +47,25 @@ void SendMessageToClient_ex7(const SOCKET& clientSocket, char message[][MAX_BUF_
 void HandleClientCommand_ex7(const SOCKET& clientSocket, char command[][MAX_BUF_SIZE], int size)
 {
 
-	//std::string message;
-	//char str_client_socket[20];
-	//errno_t err = _ultoa_s(clientSocket, str_client_socket, sizeof(str_client_socket), 10);
-
-	//if (err != 0) {
-	//	cerr << "소켓 번호 변환 실패" << endl;
-	//	return;
-	//}
-
-	//message = str_client_socket;
-	//message += " :: ";
-
 	SendMessageToClient_ex7(clientSocket, command, size);
+}
+
+
+
+void SendMessageToClient_ex8(const SOCKET& clientSocket, Data data, int size)
+{
+
+	int send_data = send(clientSocket, (char*)&data, size, 0);
+	if (send_data == SOCKET_ERROR) {
+		std::cerr << "메시지 전송 실패: " << WSAGetLastError() << std::endl;
+	}
+}
+
+void HandleClientCommand_ex8(const SOCKET& clientSocket, Data data, int size)
+{
+
+	data.x = htonl(data.x + 100);
+	data.y = htonl(data.y + 100);
+
+	SendMessageToClient_ex8(clientSocket, data, size);
 }
