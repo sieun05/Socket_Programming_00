@@ -64,8 +64,8 @@ void SendMessageToClient_ex8(const SOCKET& clientSocket, Data data, int size)
 void HandleClientCommand_ex8(const SOCKET& clientSocket, Data data, int size)
 {
 
-	data.x = htonl(data.x + 100);
-	data.y = htonl(data.y + 100);
+	data.x = htonl(data.x);
+	data.y = htonl(data.y);
 
 	SendMessageToClient_ex8(clientSocket, data, size);
 }
