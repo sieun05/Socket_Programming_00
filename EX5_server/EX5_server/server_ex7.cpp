@@ -50,7 +50,7 @@ int main() {
 	int read_data, send_data;
 	SOCKET client_socket;
 
-	int num[3]{};
+	char msg_str[3][MAX_BUF_SIZE]{};
 
 	while (true) {
 		all_fds = read_fds;
@@ -72,12 +72,9 @@ int main() {
 			if (all_fds.fd_array[i] == serverSocket) continue;
 			client_socket = all_fds.fd_array[i];
 
-			for (int k = 0;k < 3; k++)
-				num[k] = 0;
+			ZeroMemory(&msg_str, sizeof(msg_str));
 
-			read_data = recv(client_socket, (char*)&num, sizeof(num), 0);
-			for (int k = 0;k < 3; k++)
-				num[k] = ntohl(num[k]);
+			read_data = recv(client_socket, (char*)&msg_str, sizeof(msg_str), 0);
 
 			if (read_data <= 0) {
 				closesocket(client_socket);
@@ -85,9 +82,9 @@ int main() {
 				cout << client_socket << " 클라이언트 접속 종료" << endl;
 			}
 			else {
-				cout << sizeof(num) << ' ' << sizeof(num[0]) << endl;
-				cout << client_socket << " 클라이언트가 보낸 메세지: " << num[0] << ", " << num[1] << ", " << num[2] << endl;
-				HandleClientCommand(client_socket, num, sizeof(num));
+				cout << client_socket << " 클라이언트가 보낸 메세지: " << msg_str[0] << ", " << msg_str[1] << ", " << msg_str[2] << endl;
+
+				HandleClientCommand_ex7(client_socket, msg_str, sizeof(msg_str)/sizeof(msg_str[0]));
 			}
 		}
 	}
