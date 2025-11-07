@@ -27,9 +27,15 @@
     <ClCompile Include="client_ex9.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="client_Quiz.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Data.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="test_Data.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

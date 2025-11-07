@@ -6,10 +6,7 @@
 #include <iostream>
 #include <Windows.h>
 
-
-
 #pragma comment(lib, "ws2_32.lib")
-
 
 #define PORT 3500
 #define MAX_BUF_SIZE 256

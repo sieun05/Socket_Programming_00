@@ -1,6 +1,9 @@
 #pragma once
 #include "Çì´õ.h"
 #include "Data.h"
+#include "test_Data.h"
+#include "ClientManager.h"
+#include "Questions.h"
 
 #define MAX_BUF_SIZE 256
 
@@ -16,3 +19,6 @@ void HandleClientCommand_ex8(const SOCKET& clientSocket, Data data, int size);
 
 void SendMessageToClient_ex9(const SOCKET& clientSocket, Data data[], int size);
 void HandleClientCommand_ex9(const SOCKET& clientSocket, Data data[], int size);
+
+void SendMessageToClient_test(const SOCKET& clientSocket, test_Data data, int size);
+void HandleClientCommand_test(const SOCKET& clientSocket, test_Data data, int size);

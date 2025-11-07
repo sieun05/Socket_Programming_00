@@ -1,7 +1,10 @@
 #include <iostream>
 #include "HandleClientCommand.h"
 
+
 using namespace std;
+
+ClientManager clientManager;
 
 void SendMessageToClient(const SOCKET& clientSocket, int message[3], int size)
 {
@@ -89,4 +92,66 @@ void HandleClientCommand_ex9(const SOCKET& clientSocket, Data data[], int size)
 	}
 
 	SendMessageToClient_ex9(clientSocket, data, size);
+}
+
+
+void SendMessageToClient_test(const SOCKET& clientSocket, test_Data data, int size)
+{
+	data.score = htonl(data.score);
+
+	int send_data = send(clientSocket, (char*)&data, size, 0);
+	if (send_data == SOCKET_ERROR) {
+		std::cerr << "메시지 전송 실패: " << WSAGetLastError() << std::endl;
+	}
+}
+
+void HandleClientCommand_test(const SOCKET& clientSocket, test_Data data, int size)
+{
+	data.score = ntohl(data.score);
+	cout << clientSocket << " 클라이언트가 보낸 메세지" << endl;
+	cout << data << endl;
+
+	if (clientManager.isInQuiz(clientSocket)) {
+		clientManager.setInQuiz(clientSocket, false);
+		data.quiz_flag = false;
+		int cnt{};
+
+		Questions questions;
+		for (int i{}; i < 10; i++) {
+			if (questions.CheckAnswer(data.answers[i], data.questions[i])) {
+				clientManager.incrementScore(clientSocket);
+				cnt++;
+			}
+		}
+
+		data.score = clientManager.getScore(clientSocket);
+		data.answers[0] = "퀴즈 종료! 맞춘 개수: " + std::to_string(cnt) + " / 10";
+	}
+	else {
+		if (data.answers[0] == "문제") {
+			clientManager.setInQuiz(clientSocket, true);
+
+			Questions questions;
+			std::string quiz_questions[10];
+			for (int i{}; i < 10; i++) {
+				quiz_questions[i] = questions.GetRandomQustion();
+				if (quiz_questions->find(quiz_questions[i]) != std::string::npos) {
+					i--;
+				}
+			}
+			clientManager.setCurrentQuestions(clientSocket, quiz_questions);
+			for (int i{}; i < 10; i++) {
+				data.questions[i] = quiz_questions[i];
+			}
+			data.quiz_flag = true;
+			data.score = clientManager.getScore(clientSocket);
+
+			data.questions[0] = "퀴즈 시작! 총 10문제입니다.";
+		}
+		else {
+			data.questions[0] = data.answers[0] + " - 회신됨";
+		}
+	}
+
+	SendMessageToClient_test(clientSocket, data, size);
 }
