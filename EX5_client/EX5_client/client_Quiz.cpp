@@ -45,12 +45,12 @@ int main() {
 	}
 
 	test_Data data;
+	ZeroMemory(&data, sizeof(data));
 
 	while (true) {
-		ZeroMemory(&data, sizeof(data));
 
 		if (data.quiz_flag) {
-			cout << "- 문제 풀기 (현재 점수: " << data.score << ") -" << endl;
+			cout << "- 문제 풀기 (현재 점수: " << int(data.score) << ") -" << endl;
 			for (int i{}; i < 10; i++) {
 				cout << i+1 << "번째 문제: " << data.questions[i] << endl;
 
@@ -65,7 +65,7 @@ int main() {
 			cout << "서버에 보낼 내용(\"문제\": 10개문제풀기/대화종료: 999): " << endl;
 			cin >> data.answers[0];
 
-			if (data.answers[0] == "999") {
+			if (strcmp(data.answers[0], "999")==0) {
 				cout << "대화 종료" << endl;
 				break;
 			}
@@ -82,8 +82,6 @@ int main() {
 		recv(clientSocket, (char*)&data, sizeof(data), 0);
 
 		cout << "서버가 보낸 내용: " << endl;
-
-		cout << data.questions[0] << " / score: " << ntohl(data.score) << endl;
 	}
 
 	closesocket(clientSocket);

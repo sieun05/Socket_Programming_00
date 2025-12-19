@@ -107,49 +107,58 @@ void SendMessageToClient_test(const SOCKET& clientSocket, test_Data data, int si
 
 void HandleClientCommand_test(const SOCKET& clientSocket, test_Data data, int size)
 {
+	std::string temp{};
+
 	data.score = ntohl(data.score);
 	cout << clientSocket << " 클라이언트가 보낸 메세지" << endl;
 	cout << data << endl;
 
 	if (clientManager.isInQuiz(clientSocket)) {
 		clientManager.setInQuiz(clientSocket, false);
-		data.quiz_flag = false;
+		data.quiz_flag = 0;
 		int cnt{};
 
 		Questions questions;
 		for (int i{}; i < 10; i++) {
-			if (questions.CheckAnswer(data.answers[i], data.questions[i])) {
+			if (questions.CheckAnswer(data.questions[i], data.answers[i])) {
+				cout << i << "번 문제 정답!" << endl;
 				clientManager.incrementScore(clientSocket);
 				cnt++;
 			}
 		}
 
+		cout << "맞춘 개수: " << cnt << " / 10" << endl;
+		cout << clientManager.getScore(clientSocket);
 		data.score = clientManager.getScore(clientSocket);
-		data.answers[0] = "퀴즈 종료! 맞춘 개수: " + std::to_string(cnt) + " / 10";
+		cout << data.score << endl;
+		temp = "퀴즈 종료! 맞춘 개수: " + std::to_string(cnt) + " / 10";
+		strncpy_s(data.questions[0], temp.c_str(), sizeof(data.questions[0]));
 	}
 	else {
-		if (data.answers[0] == "문제") {
+		if (strcmp(data.answers[0], "문제") == 0) {
+			cout << "문제 요청 받음" << endl;
 			clientManager.setInQuiz(clientSocket, true);
 
 			Questions questions;
 			std::string quiz_questions[10];
 			for (int i{}; i < 10; i++) {
 				quiz_questions[i] = questions.GetRandomQustion();
-				if (quiz_questions->find(quiz_questions[i]) != std::string::npos) {
-					i--;
-				}
 			}
 			clientManager.setCurrentQuestions(clientSocket, quiz_questions);
 			for (int i{}; i < 10; i++) {
-				data.questions[i] = quiz_questions[i];
+				strncpy_s(data.questions[i], quiz_questions[i].c_str(), sizeof(data.questions[i]));
 			}
-			data.quiz_flag = true;
+			data.quiz_flag = 1;
 			data.score = clientManager.getScore(clientSocket);
 
-			data.questions[0] = "퀴즈 시작! 총 10문제입니다.";
+			cout << data << endl;
 		}
 		else {
-			data.questions[0] = data.answers[0] + " - 회신됨";
+			temp = data.answers[0];
+			temp += " - 회신됨";
+			strncpy_s(data.questions[0], temp.c_str(), sizeof(data.questions[0]));
+			cout << "data.question: " << data.questions[0] << endl;
+
 		}
 	}
 

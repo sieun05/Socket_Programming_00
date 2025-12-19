@@ -4,10 +4,10 @@
 
 
 struct test_Data {
-	std::string questions[10]{}; // << 있어야하나?
-	std::string answers[10]{};
-	int score{};
-	bool quiz_flag{};
+	char questions[10][256]{}; // << 있어야하나?
+	char answers[10][256]{};
+	uint8_t score{};
+	uint8_t quiz_flag{};
 
 	friend std::ostream& operator<<(std::ostream& os, const test_Data& data) {
 		if (data.quiz_flag) {
@@ -18,7 +18,7 @@ struct test_Data {
 		else {
 			os << "Message: " << data.answers[0] << std::endl;
 		}
-		os << "Score: " << data.score << std::endl;
+		os << "Score: " << int(data.score) << std::endl;
 		os << "Quiz Flag: " << (data.quiz_flag ? "true" : "false") << std::endl;
 
 		return os;
