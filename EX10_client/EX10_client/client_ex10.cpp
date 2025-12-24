@@ -1,4 +1,5 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <winsock2.h>
 #include <iostream>
@@ -42,63 +43,34 @@ int main() {
 		return 1;
 	}
 
-	Data data[3];
+	char msg_str[MAX_BUF_SIZE];
+	char id_str[10];
+	char s_msg_str[MAX_BUF_SIZE + 20];
+
+	ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
+	recv(clientSocket, s_msg_str, MAX_BUF_SIZE + 20, 0);
+	cout << "서버가 보낸 내용: " << s_msg_str << endl;
+	cout << "아이디 입력(10자 이내): ";
+	cin.getline(id_str, 10, '\n');
+
 
 	while (true) {
-		ZeroMemory(&data, sizeof(data));
-
-		cout << "서버에 보낼 내용(대화종료: 999): " << endl;
-
-		for (int i{}; i < 3; i++) {
-			cout << i << "번째 " << "Data 문자열 입력: ";
-			cin.getline(data[i].msg_str, MAX_BUF_SIZE, '\n');
-			cout << i << "번째 " << "Data x 입력: ";
-			cin >> data[i].x;
-			cout << i << "번째 " << "Data y 입력: ";
-			cin >> data[i].y;
-
-			cin.clear();
-			cin.ignore(MAX_BUF_SIZE, '\n');
-		}
-		
-
-		if (not (strcmp(data[0].msg_str, "999") or strcmp(data[1].msg_str, "999") or strcmp(data[2].msg_str, "999"))) {
-			cout << "대화 종료" << endl;
+		cout << id_str << "남(종료:exit): ";
+		cin.getline(msg_str, MAX_BUF_SIZE, '\n');
+		if (!strcmp(msg_str, "exit"))
 			break;
-		}
+		ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
+		strcat(s_msg_str, "[ ");
+		strcat(s_msg_str, id_str);
+		strcat(s_msg_str, "님] - ");
+		strcat(s_msg_str, msg_str);
 
-		cout << data[0].x << endl;
-
-		for (int i{}; i < 3; i++)
-		{
-			data[i].x = htonl(data[i].x);
-			data[i].y = htonl(data[i].y);
-		}
-		
-		cout << data[0].x << endl;
-
-		send(clientSocket, (char*)data, sizeof(data), 0);
-
-		ZeroMemory(&data, sizeof(data));
-		recv(clientSocket, (char*)data, sizeof(data), 0);
-
-		cout << data[0].x << endl;
-
-		for (int i{}; i < 3; i++)
-		{
-			data[i].x = ntohl(data[i].x);
-			data[i].y = ntohl(data[i].y);
-		}
-
-		cout << data[0].x << endl;
-
-		cout << "서버가 보낸 내용: " << endl;
-
-		for (int i{}; i < 3; i++)
-			cout << i << "번째 " << "Data 문자열: " << data[i].msg_str << ", x: " << data[i].x << ", y: " << data[i].y << endl;
-
-		
+		send(clientSocket, s_msg_str, strlen(s_msg_str) + 1, 0);
+		ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
+		recv(clientSocket, s_msg_str, MAX_BUF_SIZE + 20, 0);
+		cout << "서버가 보낸 내용: " << s_msg_str << endl;
 	}
+
 
 	closesocket(clientSocket);
 	cout << "서버와의 접속을 종료" << endl;
