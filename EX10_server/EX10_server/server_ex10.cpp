@@ -116,6 +116,8 @@ int main() {
 				}
 				else {
 					for (int j{}; j < num_client; j++) {
+						if (i == j) continue;		//자기 자신에게는 송신하지 않음
+
 						send_data = send(client_s_num[i], s_msg_str.c_str(),s_msg_str.length(), 0);
 						cout << "클라이언트로 데이터 전송: " << s_msg_str << endl;
 					}
