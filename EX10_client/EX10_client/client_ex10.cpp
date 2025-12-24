@@ -1,10 +1,10 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 
 #include <winsock2.h>
 #include <iostream>
 #include <Windows.h>
-//#include <string>
+#include <string>
 
 #pragma comment(lib, "ws2_32.lib");
 
@@ -43,32 +43,32 @@ int main() {
 		return 1;
 	}
 
-	char msg_str[MAX_BUF_SIZE];
-	char id_str[10];
-	char s_msg_str[MAX_BUF_SIZE + 20];
+	std::string msg_str;
+	std::string id_str;
+	std::string s_msg_str;
 
-	ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
-	recv(clientSocket, s_msg_str, MAX_BUF_SIZE + 20, 0);
+	s_msg_str.clear();
+	char temp_buf[MAX_BUF_SIZE + 20]{};
+	recv(clientSocket, temp_buf, MAX_BUF_SIZE + 20, 0);
+	s_msg_str += temp_buf;
 	cout << "서버가 보낸 내용: " << s_msg_str << endl;
 	cout << "아이디 입력(10자 이내): ";
-	cin.getline(id_str, 10, '\n');
-
+	std::getline(cin, id_str);
+	if (id_str.length() > 10) {
+		id_str = id_str.substr(0, 10);
+	}
 
 	while (true) {
-		cout << id_str << "남(종료:exit): ";
-		cin.getline(msg_str, MAX_BUF_SIZE, '\n');
-		if (!strcmp(msg_str, "exit"))
+		cout << id_str << "님(종료:exit): ";
+		std::getline(cin, msg_str);
+		if (msg_str == "exit")
 			break;
-		ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
-		strcat(s_msg_str, "[ ");
-		strcat(s_msg_str, id_str);
-		strcat(s_msg_str, "님] - ");
-		strcat(s_msg_str, msg_str);
+		s_msg_str.clear();
+		s_msg_str += "[" + id_str + "님] - " + msg_str;
 
-		send(clientSocket, s_msg_str, strlen(s_msg_str) + 1, 0);
-		ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
-		recv(clientSocket, s_msg_str, MAX_BUF_SIZE + 20, 0);
-		cout << "서버가 보낸 내용: " << s_msg_str << endl;
+		send(clientSocket, s_msg_str.c_str(), s_msg_str.length(), 0);
+		recv(clientSocket, temp_buf, MAX_BUF_SIZE + 20, 0);
+		cout << "서버가 보낸 내용: " << temp_buf << endl;
 	}
 
 
