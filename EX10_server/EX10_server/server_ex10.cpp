@@ -2,6 +2,20 @@
 #include "헤더.h"
 #include "HandleClientCommand.h"
 
+int client_s_num[MAX_CLIENT] = { 0, };
+int num_client = 0;
+int maxfdp1;
+
+int getmax(int k) {
+	int max = k;
+	for (int i{}; i < num_client; i++) {
+		if (client_s_num[i] > max) {
+			max = client_s_num[i];
+		}
+	}
+	return max;
+}
+
 int main() {
 	WSADATA wsdata;
 
@@ -42,64 +56,69 @@ int main() {
 		return 1;
 	}
 
-	fd_set read_fds, all_fds;
-	FD_ZERO(&read_fds);
-	FD_SET(serverSocket, &read_fds);
+	maxfdp1 = serverSocket + 1;
 
+	fd_set read_fds;
 
 	int fd_num;
 	int read_data, send_data;
 	SOCKET client_socket;
 
-	Data msg_data[3];
+	char s_msg_str[MAX_BUF_SIZE + 20];
+	char str_client_socket[10];
 
 	while (true) {
-		all_fds = read_fds;
+		FD_ZERO(&read_fds);
+		FD_SET(serverSocket, &read_fds);
+		for (int i{}; i < num_client; i++) {
+			FD_SET(client_s_num[i], &read_fds);
+		}
+		maxfdp1 = getmax(serverSocket) + 1;
 
-		fd_num = select(0, &all_fds, NULL, NULL, NULL);
+		fd_num = select(maxfdp1, &read_fds, NULL, NULL, NULL);
+		if (fd_num < 0) {
+			cout << "select 함수 오류" << endl;
+			break;
+		}
 
-		if (FD_ISSET(serverSocket, &all_fds)) {
+		if (FD_ISSET(serverSocket, &read_fds)) {
 			if ((client_socket = accept(serverSocket, NULL, NULL)) == INVALID_SOCKET) {
 				cout << "클라이언트와 데이터를 주고받는 소켓을 생성할 수 없음" << endl;
 				continue;
 			}
 			cout << client_socket << " 클라이언트 접속 성공" << endl;
-			FD_SET(client_socket, &read_fds);
+			ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
+			_ultoa(client_socket, str_client_socket, 10);
+			strcat(s_msg_str, str_client_socket);
+			strcat(s_msg_str, "님이 접속하였습니다.");
+			send(client_socket, s_msg_str, strlen(s_msg_str), 0);
+			client_s_num[num_client] = client_socket;
+			num_client++;
 			continue;
 		}
 
 
-		for (int i{}; i < all_fds.fd_count; i++) {
-			if (all_fds.fd_array[i] == serverSocket) continue;
-			client_socket = all_fds.fd_array[i];
-
-			ZeroMemory(&msg_data, sizeof(msg_data));
-
-			read_data = recv(client_socket, (char*)msg_data, sizeof(msg_data), 0);
-
-			if (read_data <= 0) {
-				closesocket(client_socket);
-				FD_CLR(client_socket, &read_fds);
-				cout << client_socket << " 클라이언트 접속 종료" << endl;
-			}
-			else {
-				for (int i{}; i < 3; i++) {
-					cout << "[" << i << "] " << msg_data[i].msg_str << ", " << msg_data[i].x << ", " << msg_data[i].y << endl;
+		for (int i{}; i < num_client; i++) {
+			if (FD_ISSET(client_s_num[i], &read_fds)) {
+				ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
+				read_data = recv(client_s_num[i], s_msg_str, MAX_BUF_SIZE + 20, 0);
+				if (read_data <= 0) {
+					closesocket(client_s_num[i]);
+					FD_CLR(client_s_num[i], &read_fds);
+					cout << client_s_num[i] << " 클라이언트 접속 종료" << endl;
+					if (i != num_client - 1) {
+						client_s_num[i] = client_s_num[num_client - 1];
+					}
+					num_client--;
+					cout << "채팅 참가자 1명 감소. 현재 참가자 수: " << num_client << endl;
 				}
-
-				for (int i{}; i < 3; i++) {
-					msg_data[i].x = ntohl(msg_data[i].x);
-					msg_data[i].y = ntohl(msg_data[i].y);
+				else {
+					for (int j{}; j < num_client; j++) {
+						send_data = send(client_s_num[i], s_msg_str, strlen(s_msg_str), 0);
+						cout << "클라이언트로 데이터 전송: " << s_msg_str << endl;
+					}
 				}
-				
-				cout << client_socket << " 클라이언트가 보낸 메세지"  << endl;
-
-				for (int i{}; i < 3; i++) {
-					cout << "[" << i << "] " << msg_data[i].msg_str << ", " << msg_data[i].x << ", " << msg_data[i].y << endl;
-				}
-
-				HandleClientCommand_ex9(client_socket, msg_data, sizeof(msg_data));
-			}
+			}		
 		}
 	}
 

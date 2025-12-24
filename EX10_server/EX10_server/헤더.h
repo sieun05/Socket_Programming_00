@@ -12,5 +12,6 @@
 #define PORT 3500
 #define MAX_BUF_SIZE 256
 #define FD_SETSIZE 100
+#define MAX_CLIENT 100
 
 using namespace std;

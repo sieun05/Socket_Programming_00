@@ -131,6 +131,7 @@
     <ClCompile Include="server_ex10.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="data.h" />
     <ClInclude Include="HandleClientCommand.h" />
     <ClInclude Include="헤더.h" />
   </ItemGroup>
