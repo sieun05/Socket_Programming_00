@@ -64,8 +64,10 @@ int main() {
 	int read_data, send_data;
 	SOCKET client_socket;
 
-	char s_msg_str[MAX_BUF_SIZE + 20];
-	char str_client_socket[10];
+	//char s_msg_str[MAX_BUF_SIZE + 20];
+	//char str_client_socket[10];
+	std::string s_msg_str{};
+	//std::string str_client_socket{};
 
 	while (true) {
 		FD_ZERO(&read_fds);
@@ -87,11 +89,9 @@ int main() {
 				continue;
 			}
 			cout << client_socket << " 클라이언트 접속 성공" << endl;
-			ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
-			_ultoa(client_socket, str_client_socket, 10);
-			strcat(s_msg_str, str_client_socket);
-			strcat(s_msg_str, "님이 접속하였습니다.");
-			send(client_socket, s_msg_str, strlen(s_msg_str), 0);
+			s_msg_str.clear();
+			s_msg_str += std::to_string(client_socket) + "님이 접속하였습니다.";;
+			send(client_socket, s_msg_str.c_str(), s_msg_str.length(), 0);
 			client_s_num[num_client] = client_socket;
 			num_client++;
 			continue;
@@ -100,8 +100,9 @@ int main() {
 
 		for (int i{}; i < num_client; i++) {
 			if (FD_ISSET(client_s_num[i], &read_fds)) {
-				ZeroMemory(s_msg_str, MAX_BUF_SIZE + 20);
-				read_data = recv(client_s_num[i], s_msg_str, MAX_BUF_SIZE + 20, 0);
+				s_msg_str.clear();
+				char temp_buf[MAX_BUF_SIZE + 20]{};
+				read_data = recv(client_s_num[i], temp_buf, MAX_BUF_SIZE + 20, 0);
 				if (read_data <= 0) {
 					closesocket(client_s_num[i]);
 					FD_CLR(client_s_num[i], &read_fds);
@@ -114,7 +115,7 @@ int main() {
 				}
 				else {
 					for (int j{}; j < num_client; j++) {
-						send_data = send(client_s_num[i], s_msg_str, strlen(s_msg_str), 0);
+						send_data = send(client_s_num[i], s_msg_str.c_str(),s_msg_str.length(), 0);
 						cout << "클라이언트로 데이터 전송: " << s_msg_str << endl;
 					}
 				}

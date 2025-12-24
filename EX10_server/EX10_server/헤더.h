@@ -1,11 +1,10 @@
 #pragma once
-#define _CRT_SECURE_NO_WARNINGS
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-
+//#define _CRT_SECURE_NO_WARNINGS
+//#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <WinSock2.h>
 #include <iostream>
 #include <Windows.h>
+#include <string>
 
 #pragma comment(lib, "ws2_32.lib")
 
