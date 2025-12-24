@@ -103,6 +103,7 @@ int main() {
 				s_msg_str.clear();
 				char temp_buf[MAX_BUF_SIZE + 20]{};
 				read_data = recv(client_s_num[i], temp_buf, MAX_BUF_SIZE + 20, 0);
+				s_msg_str += std::to_string(client_s_num[i]) + ": " + temp_buf;
 				if (read_data <= 0) {
 					closesocket(client_s_num[i]);
 					FD_CLR(client_s_num[i], &read_fds);
