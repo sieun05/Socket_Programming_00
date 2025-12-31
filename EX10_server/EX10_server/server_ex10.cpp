@@ -103,7 +103,8 @@ int main() {
 				s_msg_str.clear();
 				char temp_buf[MAX_BUF_SIZE + 20]{};
 				read_data = recv(client_s_num[i], temp_buf, MAX_BUF_SIZE + 20, 0);
-				s_msg_str += std::to_string(client_s_num[i]) + ": " + temp_buf;
+				//s_msg_str += std::to_string(client_s_num[i]) + "--" + temp_buf;
+				s_msg_str = temp_buf;
 				if (read_data <= 0) {
 					closesocket(client_s_num[i]);
 					FD_CLR(client_s_num[i], &read_fds);
@@ -118,7 +119,7 @@ int main() {
 					for (int j{}; j < num_client; j++) {
 						//if (i == j) continue;		//자기 자신에게는 송신하지 않음
 
-						send_data = send(client_s_num[i], s_msg_str.c_str(),s_msg_str.length(), 0);
+						send_data = send(client_s_num[j], s_msg_str.c_str(),s_msg_str.length(), 0);
 						cout << s_msg_str << endl;
 					}
 				}
