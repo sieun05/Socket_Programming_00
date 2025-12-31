@@ -34,6 +34,9 @@ int main() {
 		return 1;
 	}
 
+	bool nDelay = 1;
+	setsockopt(serverSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&nDelay, sizeof(nDelay));
+
 	SOCKADDR_IN serverAddress;
 	ZeroMemory(&serverAddress, sizeof(serverAddress));
 
