@@ -18,5 +18,8 @@
     <ClCompile Include="client_ex10.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="udp_client.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
